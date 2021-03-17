@@ -58,7 +58,17 @@ public class Client {
                 break;
             case  Requests.remove:
                 remove(request,index);
-
+            default:
+                try {
+                    outStream.writeUTF(request);
+                    outStream.flush();
+                } catch (IOException e) {
+                    try {
+                        System.out.println(inStream.readUTF());
+                    } catch (IOException ioException) {
+                        System.out.println(ClientMessages.MESSAGE_ERROR);
+                    }
+                }
         }
     }
 

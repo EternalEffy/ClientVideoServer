@@ -8,7 +8,7 @@ public class Main {
         client.loadClient();
         Scanner console = new Scanner(System.in);
 
-    client.request(Requests.add,"{\"user name\":\""+console.nextLine()+"\",\"age\":\""+console.nextLine()+"\"," +
+    /*client.request(Requests.add,"{\"user name\":\""+console.nextLine()+"\",\"age\":\""+console.nextLine()+"\"," +
             "\"score\":\""+console.nextLine()+"\",\"level\":\""+console.nextLine()+"\"}","0");
 
     client.request(Requests.add,"{\"user name\":\""+"Linda"+"\",\"age\":\""+"19"+"\"," +
@@ -21,6 +21,9 @@ public class Main {
     client.request(Requests.get,null,"0");
 
     client.request(Requests.remove,null,"1");
+
+     */
+        client.request("akjh",null,"10");
 
     client.close();
 
