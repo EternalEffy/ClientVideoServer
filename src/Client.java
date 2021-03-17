@@ -7,11 +7,32 @@ public class Client {
     private static Socket client;
     private static DataInputStream inStream;
     private static DataOutputStream outStream;
-    private static String name = "Alex";
+    private static String name;
+
+    public Client(String name) {
+        this.name = name;
+    }
+
+    public void setPort(int port){
+        try {
+            client = new Socket("localhost", port);
+        } catch (IOException e) {
+            setPort(port+1);
+        }
+    }
+
+    public void close(){
+        try {
+            client.close();
+            inStream.close();
+            outStream.close();
+        } catch (IOException e) {
+            System.out.println(ClientMessages.MESSAGE_CLOSE_ERROR);
+        }
+    }
 
     public void loadClient(){
         try {
-            client = new Socket("localhost", 3320);
             inStream= new DataInputStream(client.getInputStream());
             outStream=new DataOutputStream(client.getOutputStream());
 
@@ -20,7 +41,7 @@ public class Client {
             System.out.println(inStream.readUTF());
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(ClientMessages.MESSAGE_LOAD_ERROR);
         }
     }
 
@@ -43,7 +64,7 @@ public class Client {
 
     private void add(String request,String user, String index){
         try {
-            System.out.println("Отправляю запрос на добалвение пользователя");
+            System.out.println(ClientMessages.MESSAGE_ADD);
             outStream.writeUTF(request);
             outStream.flush();
             outStream.writeUTF(user);
@@ -52,26 +73,26 @@ public class Client {
             outStream.flush();
             System.out.println(inStream.readUTF());
         } catch (IOException e) {
-            System.out.println("Не удалось добавить пользователя");
+            System.out.println(ClientMessages.MESSAGE_ADD_ERROR);
         }
     }
 
     private void get(String request,String index){
         try {
-            System.out.println("Отправляю запрос на получение данных о пользователе с индексом: "+index);
+            System.out.println(ClientMessages.MESSAGE_GET+index);
             outStream.writeUTF(request);
             outStream.flush();
             outStream.writeUTF(index);
             outStream.flush();
             System.out.println(inStream.readUTF());
         } catch (IOException e) {
-            System.out.println("Не удалось получить данные");
+            System.out.println(ClientMessages.MESSAGE_GET_ERROR);
         }
     }
 
     private void edit(String request,String index,String user){
         try {
-            System.out.println("Отправляю запрос на редактирование пользователя с индексом: "+ index);
+            System.out.println(ClientMessages.MESSAGE_EDIT+ index);
             outStream.writeUTF(request);
             outStream.flush();
             outStream.writeUTF(index);
@@ -81,21 +102,21 @@ public class Client {
             System.out.println(inStream.readUTF());
 
         } catch (IOException e) {
-            System.out.println("Не удалось отредактировать пользователя");
+            System.out.println(ClientMessages.MESSAGE_EDIT_ERROR);
         }
 
     }
 
     private void remove(String request,String index){
         try {
-            System.out.println("Отправляю запрос на удаление данных о пользователе с индексом: "+index);
+            System.out.println(ClientMessages.MESSAGE_REMOVE+index);
             outStream.writeUTF(request);
             outStream.flush();
             outStream.writeUTF(index);
             outStream.flush();
             System.out.println(inStream.readUTF());
         } catch (IOException e) {
-            System.out.println("Не удалось удалить данные");
+            System.out.println(ClientMessages.MESSAGE_REMOVE_ERROR);
         }
 
     }
