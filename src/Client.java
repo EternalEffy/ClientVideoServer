@@ -13,14 +13,6 @@ public class Client {
         this.name = name;
     }
 
-    public void setPort(int port){
-        try {
-            client = new Socket("localhost", port);
-        } catch (IOException e) {
-            setPort(port+1);
-        }
-    }
-
     public void close(){
         try {
             client.close();
@@ -31,8 +23,9 @@ public class Client {
         }
     }
 
-    public void loadClient(){
+    public void loadClient(int port){
         try {
+            client = new Socket("localhost", port);
             inStream= new DataInputStream(client.getInputStream());
             outStream=new DataOutputStream(client.getOutputStream());
 
