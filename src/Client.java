@@ -45,13 +45,13 @@ public class Client {
         }
     }
 
-    public void request(String request,String user,String index){
-        switch (request){
+    public void request(String requestCode,String request,String index){
+        switch (requestCode){
             case Requests.add:
-                add(request,user,index);
+                add(request,index);
                 break;
             case Requests.edit:
-                edit(request,index,user);
+                edit(request,index);
                 break;
             case Requests.get:
                 get(request,index);
@@ -72,12 +72,10 @@ public class Client {
         }
     }
 
-    private void add(String request,String user, String index){
+    private void add(String request,String index){
         try {
             System.out.println(ClientMessages.MESSAGE_ADD);
             outStream.writeUTF(request);
-            outStream.flush();
-            outStream.writeUTF(user);
             outStream.flush();
             outStream.writeUTF(index);
             outStream.flush();
@@ -100,14 +98,12 @@ public class Client {
         }
     }
 
-    private void edit(String request,String index,String user){
+    private void edit(String request,String index){
         try {
             System.out.println(ClientMessages.MESSAGE_EDIT+ index);
             outStream.writeUTF(request);
             outStream.flush();
             outStream.writeUTF(index);
-            outStream.flush();
-            outStream.writeUTF(user);
             outStream.flush();
             System.out.println(inStream.readUTF());
 
@@ -130,4 +126,6 @@ public class Client {
         }
 
     }
+
+
 }
