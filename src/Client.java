@@ -1,7 +1,9 @@
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import org.json.JSONObject;
+
+import java.io.*;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class Client {
     private static Socket client;
@@ -38,19 +40,10 @@ public class Client {
         }
     }
 
-    public void request(String requestCode,String request,String index){
+    public void request(String requestCode,String request){
         switch (requestCode){
-            case Requests.add:
-                add(request,index);
-                break;
-            case Requests.edit:
-                edit(request,index);
-                break;
-            case Requests.get:
-                get(request,index);
-                break;
-            case  Requests.remove:
-                remove(request,index);
+            case Requests.getVideo:
+                getVideo(request);
             default:
                 try {
                     outStream.writeUTF(request);
@@ -65,59 +58,27 @@ public class Client {
         }
     }
 
-    private void add(String request,String index){
+    private void getVideo(String request) {
         try {
-            System.out.println(ClientMessages.MESSAGE_ADD);
             outStream.writeUTF(request);
             outStream.flush();
-            outStream.writeUTF(index);
-            outStream.flush();
-            System.out.println(inStream.readUTF());
+            JSONObject json = new JSONObject(inStream.readUTF());
+            System.out.println(json.getString("request"));
+            Files.createFile(Paths.get("pornhub.mp4"));
+            File f = new File("pornhub.mp4");
+            int count,total=0;
+            FileOutputStream w = new FileOutputStream(f);
+            byte[] buffer = new byte[json.getInt("video")*1024];
+            while ((count = inStream.read(buffer)) > 0) {
+                total += count;
+                w.write(buffer, 0, count);
+                if(total == count){
+                    break;
+                }
+            }
         } catch (IOException e) {
-            System.out.println(ClientMessages.MESSAGE_ADD_ERROR);
+            e.printStackTrace();
         }
-    }
-
-    private void get(String request,String index){
-        try {
-            System.out.println(ClientMessages.MESSAGE_GET+index);
-            outStream.writeUTF(request);
-            outStream.flush();
-            outStream.writeUTF(index);
-            outStream.flush();
-            System.out.println(inStream.readUTF());
-        } catch (IOException e) {
-            System.out.println(ClientMessages.MESSAGE_GET_ERROR);
-        }
-    }
-
-    private void edit(String request,String index){
-        try {
-            System.out.println(ClientMessages.MESSAGE_EDIT+ index);
-            outStream.writeUTF(request);
-            outStream.flush();
-            outStream.writeUTF(index);
-            outStream.flush();
-            System.out.println(inStream.readUTF());
-
-        } catch (IOException e) {
-            System.out.println(ClientMessages.MESSAGE_EDIT_ERROR);
-        }
-
-    }
-
-    private void remove(String request,String index){
-        try {
-            System.out.println(ClientMessages.MESSAGE_REMOVE+index);
-            outStream.writeUTF(request);
-            outStream.flush();
-            outStream.writeUTF(index);
-            outStream.flush();
-            System.out.println(inStream.readUTF());
-        } catch (IOException e) {
-            System.out.println(ClientMessages.MESSAGE_REMOVE_ERROR);
-        }
-
     }
 
 
