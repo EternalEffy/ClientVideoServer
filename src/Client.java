@@ -68,10 +68,10 @@ public class Client {
             File f = new File("pornhub.mp4");
             int count,total=0;
             FileOutputStream w = new FileOutputStream(f);
-            byte[] buffer = new byte[json.getInt("video")*1024];
+            byte[] buffer = new byte[json.getInt("video")];
             while ((count = inStream.read(buffer)) > 0) {
                 total += count;
-                w.write(buffer, 0, count);
+                w.write(buffer, 0, buffer.length);
                 if(total == count){
                     break;
                 }
