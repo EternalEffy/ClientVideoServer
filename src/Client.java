@@ -27,7 +27,7 @@ public class Client {
 
     public void loadClient(int port){
         try {
-            client = new Socket("localhost", port);
+            client = new Socket("localhost", port);//37.77.106.12
             inStream= new DataInputStream(client.getInputStream());
             outStream=new DataOutputStream(client.getOutputStream());
 
@@ -42,8 +42,8 @@ public class Client {
 
     public void request(String requestCode,String request){
         switch (requestCode){
-            case Requests.getVideo:
-                getVideo(request);
+            case Requests.getFile:
+                getFile(request);
             default:
                 try {
                     outStream.writeUTF(request);
@@ -58,24 +58,23 @@ public class Client {
         }
     }
 
-    private void getVideo(String request) {
+    private void getFile(String request) {
         try {
             outStream.writeUTF(request);
             outStream.flush();
             JSONObject json = new JSONObject(inStream.readUTF());
-            System.out.println(json.getString("request"));
-            Files.createFile(Paths.get("pornhub.mp4"));
-            File f = new File("pornhub.mp4");
-            int count,total=0;
-            FileOutputStream w = new FileOutputStream(f);
-            byte[] buffer = new byte[json.getInt("video")];
-            while ((count = inStream.read(buffer)) > 0) {
-                total += count;
-                w.write(buffer, 0, buffer.length);
-                if(total == count){
-                    break;
-                }
+            if (json.getString("request").equals("OK")) {
+                System.out.println(json.getString("request"));
+                Files.createFile(Paths.get("data.zip"));
+                File f = new File("data.zip");
+                FileOutputStream w = new FileOutputStream(f);
+                BufferedOutputStream bos = new BufferedOutputStream(w);
+                byte[] buffer = new byte[json.getInt("file")];
+                inStream.readFully(buffer, 0, buffer.length);
+                bos.write(buffer);
+                bos.flush();
             }
+            else System.out.println(json.getString("request"));
         } catch (IOException e) {
             e.printStackTrace();
         }
