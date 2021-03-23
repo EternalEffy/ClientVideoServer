@@ -15,7 +15,7 @@ public class Main {
 
          */
         client.request(Requests.getFile,"{\"request\":\""+Requests.getFile+"\"," +
-                "\"name\":\"data.zip\"}");
+                "\"name\":\"Slovenya.mp4\"}");
 
         client.close();
 

@@ -27,7 +27,7 @@ public class Client {
 
     public void loadClient(int port){
         try {
-            client = new Socket("localhost", port);//37.77.106.12
+            client = new Socket("37.77.106.12", port);//37.77.106.12
             inStream= new DataInputStream(client.getInputStream());
             outStream=new DataOutputStream(client.getOutputStream());
 
@@ -65,8 +65,8 @@ public class Client {
             JSONObject json = new JSONObject(inStream.readUTF());
             if (json.getString("request").equals("OK")) {
                 System.out.println(json.getString("request"));
-                Files.createFile(Paths.get("data.zip"));
-                File f = new File("data.zip");
+                Files.createFile(Paths.get("Slovenya.mp4"));
+                File f = new File("Slovenya.mp4");
                 FileOutputStream w = new FileOutputStream(f);
                 BufferedOutputStream bos = new BufferedOutputStream(w);
                 byte[] buffer = new byte[json.getInt("file")];
