@@ -14,8 +14,9 @@ public class Main {
                 "\"name\":\"111.txt\"}");
 
          */
+        Scanner console = new Scanner(System.in);
         client.request(Requests.getFile,"{\"request\":\""+Requests.getFile+"\"," +
-                "\"name\":\"Slovenya.mp4\"}");
+                "\"name\":\""+console.nextLine()+"\"}");
 
         client.close();
 

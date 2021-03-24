@@ -62,11 +62,12 @@ public class Client {
         try {
             outStream.writeUTF(request);
             outStream.flush();
+            JSONObject jsonObject = new JSONObject(request);
             JSONObject json = new JSONObject(inStream.readUTF());
             if (json.getString("request").equals("OK")) {
                 System.out.println(json.getString("request"));
-                Files.createFile(Paths.get("Slovenya.mp4"));
-                File f = new File("Slovenya.mp4");
+                Files.createFile(Paths.get(jsonObject.getString("name")));
+                File f = new File(jsonObject.getString("name"));
                 FileOutputStream w = new FileOutputStream(f);
                 BufferedOutputStream bos = new BufferedOutputStream(w);
                 byte[] buffer = new byte[json.getInt("file")];
